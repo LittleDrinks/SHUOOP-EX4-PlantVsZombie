@@ -53,6 +53,12 @@ public:
     // 手动重置 lastTime：将 lastTime 设置为当前 timeGetTime()。
     void reset();
 
+    // 暂停
+    void pause();
+
+    // 开始
+    void resume();
+
 private:
     DWORD currentTime = 0;
     DWORD lastTime = 0;
@@ -60,6 +66,8 @@ private:
     bool bPersistant = false;
     void (T::*function)() = nullptr;
     T* pOwner = nullptr;
+    bool paused = false;
+    DWORD pauseTime = 0;
 
     // 返回距离 lastTime 的时间差（毫秒）。
     // 要求：当 lastTime 为 0 时必须初始化 lastTime 并返回 0。
@@ -86,6 +94,9 @@ void Timer<T>::bind(double del, void (T::*func)(), T* owner, bool flag) {
 
 template <typename T>
 void Timer<T>::tick() {
+    if (paused) {
+        return;
+    }
     if (pOwner == nullptr) {
         return;
     }
@@ -117,5 +128,23 @@ DWORD Timer<T>::getDelay() {
         return 0;
     } else {
         return currentTime - lastTime;
+    }
+}
+
+template<typename T>
+void Timer<T>::pause() {
+    if (!paused) {
+        paused = true;
+        pauseTime = timeGetTime();
+    }
+}
+
+template<typename T>
+void Timer<T>::resume() {
+    if (paused) {
+        paused = false;
+        DWORD resumeTime = timeGetTime();
+        DWORD pauseDuration = resumeTime - pauseTime;
+        lastTime += pauseDuration;
     }
 }

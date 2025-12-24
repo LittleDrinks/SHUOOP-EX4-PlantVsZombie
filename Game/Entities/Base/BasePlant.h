@@ -38,4 +38,7 @@ public:
     // 调用时机：主循环每帧调用一次。
     // 约束：不要在这里直接做屏幕绘制；渲染应由引擎渲染阶段统一完成。
     virtual void update() override;
+
+    // 受击时的函数
+    void takeDamage(int harm);
 };

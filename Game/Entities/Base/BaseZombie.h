@@ -6,19 +6,24 @@
 #include "../../../Engine/Components/Renderer.h"
 #include "../../../Engine/GameStatic.h"
 #include "../../../Engine/Overall.h"
+#include "../../../Engine/Timer.h"
 #include "../../../Engine/coreMinimal.h"
 #include "BasePlant.h"
+
 
 // BaseZombie：僵尸公共基类（游戏侧）。
 //
 // 职责：
-// - 作为可渲染对象（继承 StaticMesh），承载僵尸的 SpriteRenderer/Animator/BoxCollider 组件。
-// - 维护僵尸的基础状态机：走路/吃植物/死亡，并提供被攻击/减速/冻结/恢复等基础行为入口。
+// - 作为可渲染对象（继承 StaticMesh），承载僵尸的
+// SpriteRenderer/Animator/BoxCollider 组件。
+// -
+// 维护僵尸的基础状态机：走路/吃植物/死亡，并提供被攻击/减速/冻结/恢复等基础行为入口。
 // - 记录与植物的接触列表 collisions，用于 judge()/eat() 决策。
 //
 // 调用约定：
 // - update()/judge() 应每帧调用一次（由对象系统或主循环驱动）。
-// - BoxCollider 的碰撞回调由引擎 CollisionJudge() 触发；回调内部通常会更新 collisions。
+// - BoxCollider 的碰撞回调由引擎 CollisionJudge() 触发；回调内部通常会更新
+// collisions。
 class BaseZombie : public StaticMesh {
 public:
     // 僵尸类型枚举：用于区分不同派生僵尸的资源/属性。
@@ -60,6 +65,9 @@ protected:
 
     // 生命值：降到 0（或更小）应进入死亡流程。
     int hp = 10;
+
+    // 攻击计时器：控制吃植物的触发频率。
+    Timer<BaseZombie> eatTimer;
 
     // 阴影/遮罩渲染器（用于增加层次；如何绘制由实现决定）。
     SpriteRenderer* shade;

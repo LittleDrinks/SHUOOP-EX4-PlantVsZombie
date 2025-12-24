@@ -3,7 +3,7 @@
 #include "PeaShooter.h"
 
 PeaShooter::PeaShooter() {
-    hp = 300;
+    hp = 10;
     cost = 100;
     anim->addAnimation("idle", "../res/animations/plants/peashooter.png", 4, 6,
                        24, 0.05);

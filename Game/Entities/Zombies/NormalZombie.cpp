@@ -3,11 +3,9 @@
 #include "NormalZombie.h"
 
 NormalZombie::NormalZombie() {
-    hp = 2;  // for test
-
     name = normalZombie;
-    anim->addAnimation("walk", "../res/animations/zombies/normal/walk.png", 5, 10, 46, 0.05);
-    anim->play("walk");
+    anim->addAnimation("walk", "../res/animations/zombies/normal/walk.png", 5, 10, 46, 0.12);
+    anim->addAnimation("eat", "../res/animations/zombies/normal/eat.png", 4, 10, 39, 0.06);
 }
 
 void NormalZombie::judge() {

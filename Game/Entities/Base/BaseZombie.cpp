@@ -13,7 +13,10 @@ BaseZombie::BaseZombie() {
     box->setType("Zombie");
     box->setSize(Point(35, 85));
 
-    ash.Load("../res/animations/zombies/ash.png", 1, 20, 20, 0.1);
+    // 配置吃植物计时器
+    eatTimer.bind(0.6, &BaseZombie::eat, this, true);
+
+    // ash.Load("../res/animations/zombies/ash.png", 1, 20, 20, 0.1);
 }
 
 BaseZombie::~BaseZombie() {
@@ -35,9 +38,10 @@ void BaseZombie::update() {
     if (state == 0) {
         // slowFlag: 2=正常速度，1=减速一半
         addPosition(speed * (slowFlag / 2.0));
+        anim->play("walk");
     } else if (state == 1) {
-        // TODO: 按原项目用 Timer 驱动 eat() 的触发频率。
-        // eat();
+        anim->play("eat");
+        eatTimer.tick();
     } else {
         // TODO: 播放死亡动画/灰烬效果后再销毁。
         Destroy();
@@ -61,7 +65,8 @@ void BaseZombie::judge() {
         if (!collisions.empty()) {
             if (state == 0) {
                 state = 1;
-                // TODO：eat
+                eatTimer.reset();
+
             }
         } else if (state == 1) {
             state = 0;
@@ -71,7 +76,12 @@ void BaseZombie::judge() {
 }
 
 void BaseZombie::eat() {
-    // TODO
+    const auto& plants = box->getCollisions("Plant");
+    if (!plants.empty()) {
+        if (auto* plant = Cast<BasePlant>(plants[0])) {
+            plant->takeDamage(1);
+        }
+    }
 }
 
 void BaseZombie::getAttack(int harm) {
