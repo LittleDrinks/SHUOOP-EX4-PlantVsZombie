@@ -1,0 +1,110 @@
+[main] 正在生成文件夹: e:/shared/workplace/OOP/ep4/build all
+[build] 正在启动生成
+[proc] 正在执行命令: "D:\Program Files\CMake\bin\cmake.EXE" --build e:/shared/workplace/OOP/ep4/build --config Debug --target all -j 20 --
+[build] [  5%] Building CXX object CMakeFiles/ep4_main.dir/Engine/Components/Renderer.cpp.obj
+[build] [ 10%] Building CXX object CMakeFiles/ep4_main.dir/Engine/GameStatic.cpp.obj
+[build] [ 15%] Building CXX object CMakeFiles/ep4_main.dir/Engine/coreMinimal.cpp.obj
+[build] [ 21%] Building CXX object CMakeFiles/ep4_main.dir/Engine/game.cpp.obj
+[build] [ 26%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseBullet.cpp.obj
+[build] [ 31%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Base/BasePlant.cpp.obj
+[build] [ 36%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseZombie.cpp.obj
+[build] [ 42%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Bullets/Pea.cpp.obj
+[build] [ 47%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Plants/PeaShooter.cpp.obj
+[build] [ 52%] Building CXX object CMakeFiles/ep4_main.dir/Game/Entities/Zombies/NormalZombie.cpp.obj
+[build] In file included from E:\shared\workplace\OOP\ep4\Engine\GameStatic.cpp:1:
+[build] E:\shared\workplace\OOP\ep4\Engine\GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:\shared\workplace\OOP\ep4\Engine\GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] In file included from E:\shared\workplace\OOP\ep4\Engine\Components\Renderer.cpp:2:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] In file included from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BaseBullet.h:5,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BaseBullet.cpp:1:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] In file included from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BasePlant.h:5,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BasePlant.cpp:1:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] CMakeFiles\ep4_main.dir\build.make:133: recipe for target 'CMakeFiles/ep4_main.dir/Engine/GameStatic.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Engine/GameStatic.cpp.obj] Error 1
+[build] mingw32-make.exe[2]: *** Waiting for unfinished jobs....
+[build] In file included from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BaseZombie.h:7,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Base\BaseZombie.cpp:3:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] CMakeFiles\ep4_main.dir\build.make:231: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseBullet.cpp.obj' failed
+[build] CMakeFiles\ep4_main.dir\build.make:119: recipe for target 'CMakeFiles/ep4_main.dir/Engine/Components/Renderer.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseBullet.cpp.obj] Error 1
+[build] In file included from E:/shared/workplace/OOP/ep4/Game/Entities/Base/BasePlant.h:5,
+[build]                  from E:/shared/workplace/OOP/ep4/Game/Entities/Plants/PeaShooter.h:3,
+[build]                  from E:\shared\workplace\OOP\ep4\Engine\game.cpp:5:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Engine/Components/Renderer.cpp.obj] Error 1
+[build] E:\shared\workplace\OOP\ep4\Engine\game.cpp: In function 'void StartGame()':
+[build] E:\shared\workplace\OOP\ep4\Engine\game.cpp:65:27: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    65 |         for (auto& comp : GameComponents_) {
+[build]       |                           ^~~~~~~~~~~~~~~
+[build]       |                           GameComponents
+[build] E:\shared\workplace\OOP\ep4\Engine\game.cpp:68:26: error: 'GameObjects_' was not declared in this scope; did you mean 'GameObjects'?
+[build]    68 |         for (auto& obj : GameObjects_) {
+[build]       |                          ^~~~~~~~~~~~
+[build]       |                          GameObjects
+[build] CMakeFiles\ep4_main.dir\build.make:245: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Base/BasePlant.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Base/BasePlant.cpp.obj] Error 1
+[build] In file included from E:\shared\workplace\OOP\ep4\Game\Entities\Bullets\Pea.h:4,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Bullets\Pea.cpp:1:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] CMakeFiles\ep4_main.dir\build.make:259: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseZombie.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Base/BaseZombie.cpp.obj] Error 1
+[build] In file included from E:\shared\workplace\OOP\ep4\Game\Entities\Zombies\NormalZombie.cpp:2:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] In file included from E:/shared/workplace/OOP/ep4/Game/Entities/Base/BasePlant.h:5,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Plants\PeaShooter.h:3,
+[build]                  from E:\shared\workplace\OOP\ep4\Game\Entities\Plants\PeaShooter.cpp:3:
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h: In static member function 'static T* GameStatic::createComponent(Point)':
+[build] E:/shared/workplace/OOP/ep4/Engine/GameStatic.h:53:13: error: 'GameComponents_' was not declared in this scope; did you mean 'GameComponents'?
+[build]    53 |             GameComponents_.insert(buffer);
+[build]       |             ^~~~~~~~~~~~~~~
+[build]       |             GameComponents
+[build] CMakeFiles\ep4_main.dir\build.make:217: recipe for target 'CMakeFiles/ep4_main.dir/Engine/game.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Engine/game.cpp.obj] Error 1
+[build] CMakeFiles\ep4_main.dir\build.make:273: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Bullets/Pea.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Bullets/Pea.cpp.obj] Error 1
+[build] CMakeFiles\ep4_main.dir\build.make:301: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Zombies/NormalZombie.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Zombies/NormalZombie.cpp.obj] Error 1
+[build] CMakeFiles\ep4_main.dir\build.make:287: recipe for target 'CMakeFiles/ep4_main.dir/Game/Entities/Plants/PeaShooter.cpp.obj' failed
+[build] mingw32-make.exe[2]: *** [CMakeFiles/ep4_main.dir/Game/Entities/Plants/PeaShooter.cpp.obj] Error 1
+[build] CMakeFiles\Makefile2:85: recipe for target 'CMakeFiles/ep4_main.dir/all' failed
+[build] mingw32-make.exe[1]: *** [CMakeFiles/ep4_main.dir/all] Error 2
+[build] Makefile:89: recipe for target 'all' failed
+[build] mingw32-make.exe: *** [all] Error 2
+[proc] 命令“"D:\Program Files\CMake\bin\cmake.EXE" --build e:/shared/workplace/OOP/ep4/build --config Debug --target all -j 20 --”已退出，代码为 2
+[driver] 生成完毕: 00:00:03.678
+[build] 生成已完成，退出代码为 2

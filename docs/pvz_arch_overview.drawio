@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net" modified="2025-12-20T00:00:00.000Z" agent="Copilot" version="24.7.8" type="device">
+  <diagram id="overview" name="Overview">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="10" value="PVZ (参考项目) 总览\n\n入口: game.cpp\n全局容器: Overall.h\n工厂: GameStatics\n资源: Resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="420" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="20" value="Main Loop\nInput() / Update() / Render()\n+ Info() (debug)\n+ Pause/Continue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="190" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="21" value="Objects &amp; Components\n(Object / Component / VisualComponent)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="190" width="300" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="22" value="Resources (ResourcePool)\nLoad/Fetch images + media" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="680" y="190" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="23" value="Rendering\nGameRenders (sorted)\nSpriteRenderer::Render()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="24" value="Animation\nAnimation + Animator(Component)\nTimer drives frame index\nObject::aniSource bridges" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="340" y="380" width="300" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="25" value="Collision\nGameColliders (global set)\nBoxCollider holds contacts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="680" y="380" width="260" height="140" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="30" value="Overall.h\n(全局容器/全局单例)\nGameObjects, GameComponents\nGameRenders, GameColliders\nMainController/MainCamera\nGlobalInstance, ResourcePool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="680" y="30" width="260" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="10" target="20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="10" target="21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="10" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e4" value="reads" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="20" target="21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="uses" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="21" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="fetch" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="23" target="22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="drives" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="24" target="21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" value="checks" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="25" target="21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" value="globals" style="endArrow=block;html=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="30" target="20">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
