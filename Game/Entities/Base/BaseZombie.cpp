@@ -36,15 +36,33 @@ void BaseZombie::update() {
 
     // 0: 走路 1: 吃植物 2: 死亡
     if (state == 0) {
+        if (renderer) renderer->setLayer(row + 2);
         // slowFlag: 2=正常速度，1=减速一半
         addPosition(speed * (slowFlag / 2.0));
         anim->play("walk");
+
+        // 检查是否到达左边界导致游戏失败
+        if (getWorldPosition().x < -50) {
+            // 触发游戏失败逻辑
+            // 这里简单打印或调用全局失败处理
+            // GameStatics::GetInstance()->GameOver();
+            // 暂时先不处理，等待完善
+        }
     } else if (state == 1) {
         anim->play("eat");
         eatTimer.tick();
     } else {
-        // TODO: 播放死亡动画/灰烬效果后再销毁。
-        Destroy();
+        // 2: 死亡
+        if (renderer) renderer->setLayer(row + 2);
+        if (box) box->setOpen(false);
+
+        // 冻结/减速版本使用 die_1（更慢），否则用 die。
+        anim->play((slowFlag == 2) ? "die" : "die_1");
+
+        // 等待死亡动画播完再销毁。
+        if (anim->isCurrentFinished()) {
+            Destroy();
+        }
     }
 }
 

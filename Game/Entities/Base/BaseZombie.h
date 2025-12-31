@@ -41,6 +41,7 @@ protected:
     // 当前僵尸类型。
     zombieName name = normalZombie;
 
+protected:
     // 组件：碰撞体。
     // 所有权：由对象/组件系统管理；本类仅保存指针引用。
     BoxCollider* box;

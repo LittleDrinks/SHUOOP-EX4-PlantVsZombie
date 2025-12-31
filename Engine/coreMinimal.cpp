@@ -10,6 +10,11 @@ std::set<Component*> GameComponents;
 std::set<Object*> DGameObjects;
 std::set<Component*> DGameComponents;
 
+// PVZ2-like UI globals (compat layer)
+std::set<UserInterface*> GameUIs;
+std::vector<UserInterface*> GameUIs_;
+std::set<Widget*> GamePainters;
+
 /*
  * Point
  */

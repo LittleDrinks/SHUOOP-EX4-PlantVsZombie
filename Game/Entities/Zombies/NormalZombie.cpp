@@ -4,8 +4,12 @@
 
 NormalZombie::NormalZombie() {
     name = normalZombie;
-    anim->addAnimation("walk", "../res/animations/zombies/normal/walk.png", 5, 10, 46, 0.12);
-    anim->addAnimation("eat", "../res/animations/zombies/normal/eat.png", 4, 10, 39, 0.06);
+    anim->addAnimation("walk", "res/animations/zombies/normal/walk.png", 5, 10, 46, 0.12);
+    anim->addAnimation("eat", "res/animations/zombies/normal/eat.png", 4, 10, 39, 0.06);
+
+    // 死亡动画：资源在 zombies 目录下（与原项目一致：10x1，共 10 帧）。
+    anim->addAnimation("die", "res/animations/zombies/die.png", 10, 1, 10, 0.1, false);
+    anim->addAnimation("die_1", "res/animations/zombies/die_1.png", 10, 1, 10, 0.2, false);
 }
 
 void NormalZombie::judge() {

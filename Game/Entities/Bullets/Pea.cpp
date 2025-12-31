@@ -2,7 +2,7 @@
 
 Pea::Pea() {
     setSpeed(Point(3.0, 0.0));
-    renderer->load("../res/animations/bullets/pea.png");
+    renderer->load("res/animations/bullets/pea.png");
     renderer->setLayer(8);
 
     box->setSize(Point(25, 25));

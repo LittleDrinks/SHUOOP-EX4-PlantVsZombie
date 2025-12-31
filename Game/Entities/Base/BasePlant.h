@@ -41,4 +41,21 @@ public:
 
     // 受击时的函数
     void takeDamage(int harm);
+
+    int getCost() const { return cost; }
+
+    int getHp() const { return hp; }
+
+    // 设置是否启用（种植后启用，预览时不启用）
+    void setEnabled(bool en) {
+        enabled = en;
+        if (box) {
+            box->setOpen(en);
+            box->setType(en ? "Plant" : "PreviewPlant");
+        }
+    }
+    bool isEnabled() const { return enabled; }
+
+protected:
+    bool enabled = false;
 };

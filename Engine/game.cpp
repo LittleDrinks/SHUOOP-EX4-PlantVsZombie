@@ -1,6 +1,8 @@
 
 #include <set>
 #include <thread>
+#include <direct.h>
+#include <io.h>
 
 #include "../Game/Entities/Plants/PeaShooter.h"
 #include "../Game/Entities/Zombies/NormalZombie.h"
@@ -15,14 +17,32 @@
 #include "Resources.h"
 #include "Timer.h"
 #include "coreMinimal.h"
+#include "Objects/UserInterface.h"
+
+#include "Pvz2CompatGlobals.h"
+
+#include "../Game/Controllers/BattleController.h"
+#include "../Game/Levels/LevelOne.h"
 
 void Init() {
+    // 尽量对齐原项目：资源路径使用 res/...。
+    // 若当前工作目录不含 res/，则尝试切到上一级（常见于从 build/ 运行）。
+    if (_access("res\\images\\bar.png", 0) != 0) {
+        _chdir("..");
+    }
+
     initgraph(WIN_WIDTH, WIN_HEIGHT);
     BeginBatchDraw();
     setbkmode(TRANSPARENT);
-    Background* bg = GameStatic::createObject<Background>(Point(0, 0));
-    GameStatic::createObject<NormalZombie>(Point(270, 300));
-    GameStatic::createObject<PeaShooter>(Point(200, 350));
+    // 对齐原项目资源坐标系：bg5 背景图存在左侧留白区域，原项目通过偏移/相机处理。
+    // 当前工程未实现 Camera 变换，这里直接把背景左移，减少草坪格子视觉偏移。
+    GameStatic::createObject<Background>(Point(-225, 0));
+
+    // PVZ2-like controller & UI
+    GameStatic::createObject<ABattleController>(Point(0, 0));
+
+    // Level flow
+    GameStatic::createObject<LevelOne>(Point(0, 0));
 }
 
 void StartGame() {
@@ -31,7 +51,6 @@ void StartGame() {
 
     // 游戏主循环 (Game Loop)
     // 使用 while 循环替代 timeSetEvent，避免多线程渲染问题
-    ExMessage msg;
     auto lastTime = std::chrono::high_resolution_clock::now();
     double accumulator = 0.0;
 
@@ -50,16 +69,15 @@ void StartGame() {
         }
         accumulator += frameSeconds;
 
-        // 处理输入（按真实帧频率处理即可）
-        while (peekmessage(&msg)) {
-            if (msg.message == WM_QUIT || msg.message == WM_CLOSE) {
-                running = false;
-                break;
-            }
-        }
-        if (!running) break;
-        if (GameStatic::getPlayerController()) {
+        // 处理输入：由 Controller 统一消费消息队列，避免消息被重复读取/提前丢失
+        if (MainController) {
+            MainController->handleInput();
+        } else if (GameStatic::getPlayerController()) {
             GameStatic::getPlayerController()->handleInput();
+        }
+        if (QuitRequested) {
+            running = false;
+            break;
         }
 
         // 固定时间步长更新：无论渲染帧率如何，逻辑以 DELTA_TIME 稳定推进
@@ -85,6 +103,20 @@ void StartGame() {
                 obj->update();
             }
 
+            // UI 更新（PVZ2-like）
+            for (auto* ui : GameUIs) {
+                ui->Update();
+            }
+
+            // UI 删除队列
+            if (!GameUIs_.empty()) {
+                for (auto* ui : GameUIs_) {
+                    GameUIs.erase(ui);
+                    delete ui;
+                }
+                GameUIs_.clear();
+            }
+
             // 碰撞判定
             CollisionJudge();
 
@@ -95,6 +127,11 @@ void StartGame() {
         cleardevice();
         for (auto& vc : GameRenders) {
             vc->Render();
+        }
+
+        // UI Painter 渲染（PVZ2-like）
+        for (auto* p : GamePainters) {
+            p->Paint();
         }
         FlushBatchDraw();
 

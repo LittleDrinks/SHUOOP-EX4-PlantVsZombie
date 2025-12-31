@@ -22,6 +22,7 @@ private:
     double interval = 0.1;  // 帧间隔，单位秒
     double timer = 0.0;     // 计时器
     bool loop = true;       // 是否循环播放
+    bool finished = false;  // 非循环播放时：是否已播到末尾
 
 public:
     Animation() {}
@@ -32,13 +33,20 @@ public:
     // - row/col：sprite sheet 的行/列。
     // - frames：有效帧数（用于限制 index）。
     // - speed：帧间隔（秒）。
+    // - looped：是否循环播放。
     // 副作用：调用 Resources::Load 并设置 info.img。
     void Load(std::string path, int row, int col, int frames,
-              double speed);
+              double speed, bool looped = true);
 
     // 推进动画：根据 interval 更新 info.index。
     // 调用时机：由 Animator::update() 每帧调用。
     void update();
+
+    // 重置动画到第 0 帧。
+    void reset();
+
+    // 是否播完（仅对非循环动画有意义）。
+    bool isFinished() const { return finished; }
 
     // 获取当前帧的 SpriteInfo。
     // 用途：Animator 把该值写入 owner->setAniSource(...)，供 SpriteRenderer 裁剪渲染。
@@ -65,7 +73,7 @@ public:
     // 参数：
     // - name：动画名（play() 的 key）。
     // - path/row/col/frames/speed：见 Animation::Load。
-    void addAnimation(std::string name, std::string path, int row, int col, int frames, double speed);
+    void addAnimation(std::string name, std::string path, int row, int col, int frames, double speed, bool looped = true);
 
     // 切换当前动画。
     // 行为：如果 name 存在，则 curAnim 指向 animations[name]。
@@ -73,4 +81,7 @@ public:
 
     // 每帧更新：推进动画并写入 owner->setAniSource。
     void update() override;
+
+    // 当前动画是否播放完（仅对非循环动画有意义）。
+    bool isCurrentFinished() const;
 };

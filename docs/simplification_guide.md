@@ -1,166 +1,94 @@
-# ep4 复现操作指南（下一个版本：v0.1.0-alpha.2 —— 僵尸吃植物闭环）
+# ep4 复现指南（完全对齐原版 PlantVsZombie2 框架）
 
-你现在不缺“想法”，你缺的是：**下一版到底只做哪几件事、做到什么程度算完成。**
+目标：在 ep4 内部以**原项目的类名/接口/调用链**跑出最小战斗界面（植物、僵尸、种植栏、背景音乐），不写菜单，不发明任何新接口/全局名。
 
-这份指南只干两件事：
-1) 明确 v0.1.0-alpha.2 的目标（别加戏）
-2) 给你一套“照着改文件就能过验收”的步骤
+适用范围：
+- 你想要“文件名一致、接口名一致、调用位置一致”。
+- 不接受 `Pvz2CompatGlobals` 等自创命名，也不接受在 ep4 Engine 上套一层兼容层。
 
----
-
-## 0) 这一版只做 4 件事（写进 commit message 的那种）
-
-### 0.1 版本目标（一句话）
-**僵尸能靠碰撞箱识别植物 → 停下 → 按节奏咬植物 → 植物死 → 僵尸继续走。**
-
-### 0.2 Done Definition（做完就算过）
-- 工程能编译运行（不允许“缺个函数名但我懂就行”）。
-- `CollisionJudge()` 真正存在，并且每帧会把碰撞关系写进 `BoxCollider::boxes`。
-- `BasePlant` 有明确的“扣血并死亡销毁”接口。
-- `BaseZombie` 吃植物不是每帧吃，而是用 `Timer` 控制频率（比如 0.6 秒一口）。
+验收标准：
+1) 新增的可执行目标 `pvz2_main` 能编译运行。
+2) 运行时工作目录指向 `ep4/pvz2/`，资源加载正常（图片/音频不缺）。
+3) 一启动就进入战斗：能看到草坪、种植栏、至少一种植物能下地，至少一种僵尸能出现，背景音乐播放。
+4) 所有类/函数/全局名与原项目完全一致（如 `GameStatics`、`Controller`、`UserInterface`、`UBattleUI`、`ABattleController`），无自创命名。
 
 ---
 
-## 1) 第一步：先把碰撞系统接上（不然后面全是假的）
+## 1) 目录与资源：直接搬原项目
 
-你现在的主循环已经在调用 `CollisionJudge();`，但工程里还缺这个函数的真实实现。
-
-**你要记住一句话**：
-> **只有引擎每帧先算完碰撞，`box->getCollisions("Plant")` 才可能拿到东西。**
-
-### 1.1 你要做什么
-实现一个全局函数：`void CollisionJudge();`
-
-### 1.2 推荐放哪
-最简单做法：
-- 在 `ep4/Engine/Components/BoxCollider.h` 里声明 `void CollisionJudge();`
-- 在 `ep4/Engine/Components/BoxCollider.cpp` 里实现它
-
-### 1.3 它必须做什么（最低要求）
-每帧：
-1) 遍历 `GameColliders_`，对每个 collider 调用 `clear()`
-2) 两两检测：`if (a != b) a->Insert(b);`
-
-> 这版先别做四叉树/网格分区优化。能对、能跑、能验收最重要。
+1. 在 `ep4/` 下创建 `pvz2/`。
+2. 从原项目复制到 `ep4/pvz2/`：
+   - `PlantVsZombie2/*.h`、`PlantVsZombie2/*.cpp`
+   - `PlantVsZombie2/engine/`
+   - `PlantVsZombie2/res/`
+3. 不要复制生成物（`x64/`、`.sln`、`.vcxproj`、可执行文件）。
+4. 运行时工作目录必须是 `ep4/pvz2/`，否则资源全挂。
 
 ---
 
-## 2) 第二步：补 Timer 的“单独暂停/恢复”（给未来留口子）
+## 2) CMake：新增原版可执行 pvz2_main
 
-你当前的 `Timer` 已经能 tick，但缺少“只暂停某一个 Timer”的能力。
+在 `ep4/CMakeLists.txt` 末尾追加：
 
-**修改文件**：`ep4/Engine/Timer.h`
+```cmake
+# --- 原项目框架版（PlantVsZombie2） ---
+file(GLOB_RECURSE PVZ2_SRC
+    pvz2/**.cpp
+    pvz2/**.h
+)
 
-### 2.1 添加成员变量（private）
-```cpp
-bool bPaused = false;
-DWORD pauseStartTime = 0;
+add_executable(pvz2_main ${PVZ2_SRC})
+target_link_libraries(pvz2_main libeasyx.a winmm Msimg32)
 ```
 
-### 2.2 添加接口（public）
-```cpp
-void pause();
-void resume();
-```
-
-### 2.3 修改 tick
-规则就一句：**暂停时不走字、不触发回调。**
+注意：
+- 确保 `pvz2_main` 只编译 `pvz2/**`，不要把 `src/main.cpp` 混进来。
+- 如果链接报“找不到 main/WinMain”，把 `pvz2/game.cpp` 末尾 `void main()` 改成 `int main()` 并 `return 0;`，其他不动。
 
 ---
 
-## 3) 第三步：植物必须能“掉血 + 死亡销毁”
+## 3) 运行方式（工作目录必须对）
 
-你现在的 `BasePlant` 只有 `hp<=0 就 Destroy()`，但没有明确的“受击接口”。
-僵尸要咬你，就必须有这个接口。
+- VS Code/CMake Tools：选择目标 `pvz2_main`，运行配置的 `cwd` 设为 `ep4/pvz2`。
+- 命令行：先 `cd ep4/pvz2`，再从构建输出目录运行 `pvz2_main.exe`。
 
-**修改文件**：
-- `ep4/Game/Entities/Base/BasePlant.h`
-- `ep4/Game/Entities/Base/BasePlant.cpp`
-
-### 3.1 在头文件声明
-```cpp
-void takeDamage(int harm);
-```
-
-### 3.2 在 cpp 实现
-```cpp
-void BasePlant::takeDamage(int harm) {
-    hp -= harm;
-    if (hp <= 0) {
-        Destroy();
-    }
-}
-```
-
-> 注意：你可以继续保留 `update()` 里 `hp<=0` 的兜底销毁，但咬人逻辑必须走 `takeDamage()`。
+资源缺失、全白屏、无音乐，十有八九是工作目录错了。
 
 ---
 
-## 4) 第四步：僵尸“走/吃”状态机 + 吃的节奏
+## 4) 最小战斗版该改哪些文件（且只改这些）
 
-你现在的 `BaseZombie` 已经在 `judge()` 里用 `box->getCollisions("Plant")` 取植物了，
-但还差两块：
-1) `eat()` 真正扣血
-2) 吃不是每帧调用，用 `Timer` 限速
+- `pvz2/BattleUI.h`、`pvz2/BattleUI.cpp`：负责选卡/种植栏，产出 `index`、`failFlag` 等原版字段。
+- `pvz2/BattleController.h`、`pvz2/BattleController.cpp`：消费 `index`，生成/拖拽/落子植物，生成僵尸，播放 BGM，调用 `FindCoordinate()`（保持公式不改）。
+- `pvz2/game.cpp`：入口直接进入战斗，不写菜单。保持原版接口，创建 `UBattleUI` 和 `ABattleController`，把当前 UI/Controller 指向它们（用原项目已有的全局/接口，不新增自创指针）。
 
-**修改文件**：
-- `ep4/Game/Entities/Base/BaseZombie.h`
-- `ep4/Game/Entities/Base/BaseZombie.cpp`
+禁止事项：
+- 不要新增任何兼容层命名（例如 `Pvz2CompatGlobals`、`MainController` 指针别名等）。
+- 不要改类/函数签名；业务逻辑可以简化，但接口名必须与原项目一致。
 
-### 4.1 给 BaseZombie 加一个吃的计时器
-在 `.h` 里 include：
-```cpp
-#include "../../../Engine/Timer.h"
-```
-
-加成员：
-```cpp
-Timer<BaseZombie> eatTimer;
-```
-
-### 4.2 在构造里 bind（建议 0.6 秒一口）
-```cpp
-eatTimer.bind(0.6, &BaseZombie::eat, this, true);
-```
-
-### 4.3 实现 eat()（最小正确版本）
-```cpp
-void BaseZombie::eat() {
-    if (collisions.empty()) return;
-    BasePlant* plant = collisions[0];
-    if (plant) {
-        plant->takeDamage(1);
-    }
-}
-```
-
-### 4.4 修改 update()：走路就移动，吃就 tick
-```cpp
-if (state == 0) {
-    addPosition(speed * (slowFlag / 2.0));
-} else if (state == 1) {
-    eatTimer.tick();
-} else {
-    Destroy();
-}
-```
-
-### 4.5 修改 judge()：切状态时做一件关键事
-当你从“走路 -> 吃”切换时，建议：
-- 立刻 `eatTimer.reset();`（避免刚切换就“立刻触发一口”，节奏更稳定）
+简化建议（仍在原文件内完成）：
+- 卡槽可以先做最少数量（比如 1-2 张），价格/冷却可临时放宽逻辑，但接口字段保留。
+- 僵尸种类可先放 1 种，生成点/波次可写死。
+- BGM：沿用原项目播放调用（通常在 `ABattleController::Init()` 或对应函数中），不要换接口名。
 
 ---
 
-## 5) 验收清单（你跑一遍就知道过没过）
+## 5) 常见踩坑
 
-运行游戏后：
+- 资源加载失败：工作目录没指到 `ep4/pvz2/`。
+- 链接报 main/WinMain：按上面的最小改法把 `void main()` 改成 `int main()`。
+- easyx/AlphaBlend/winmm 链接失败：`pvz2_main` 目标缺少 `libeasyx.a winmm Msimg32`。
+- 发现自创命名：回退，删除自创的全局/接口，直接用原项目的类/函数。
 
-1) 放一个植物在僵尸路线上（PeaShooter 就行）。
-2) 观察僵尸：
-   - 碰到植物后停下（state 从 0 -> 1）
-   - 每隔 ~0.6 秒咬一次（植物 hp 逐步减少）
-   - 植物死亡消失（Destroy 生效）
-   - 植物消失后僵尸继续走（state 从 1 -> 0）
+---
 
-如果这四条都满足，v0.1.0-alpha.2 结束，不许继续加功能。
+## 6) 验收清单（最小战斗版）
+
+运行 `pvz2_main` 后应看到：
+- 草坪、种植栏、至少一张卡可选，鼠标可拖放植物到草坪上。
+- 至少一种僵尸会出现并移动。
+- 背景音乐正常播放。
+- 使用的类/函数/全局名全部来自原项目，无新增命名。
+
+满足以上即可过本轮，先跑通再扩展功能。 
 

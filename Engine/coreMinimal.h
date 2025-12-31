@@ -17,6 +17,7 @@
 #include <iostream>
 #include <random>
 #include <set>
+#include <vector>
 #include <string>
 
 #include "Overall.h"  // 全局配置
@@ -271,6 +272,13 @@ extern std::set<Component*> DGameComponents;
 // 全局对象集合：元素为所有 Object。
 extern std::set<Object*> GameObjects;
 extern std::set<Object*> DGameObjects;
+
+// --- PVZ2-like UI globals (compat layer) ---
+class UserInterface;
+class Widget;
+extern std::set<UserInterface*> GameUIs;
+extern std::vector<UserInterface*> GameUIs_;
+extern std::set<Widget*> GamePainters;
 
 /*
  * functions

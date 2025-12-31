@@ -5,14 +5,16 @@
 PeaShooter::PeaShooter() {
     hp = 10;
     cost = 100;
-    anim->addAnimation("idle", "../res/animations/plants/peashooter.png", 4, 6,
+    anim->addAnimation("idle", "res/animations/plants/peashooter.png", 4, 6,
                        24, 0.05);
     tm.bind(shootInterval, &PeaShooter::shoot, this, true);
 }
 
 void PeaShooter::update() {
     BasePlant::update();
-    tm.tick();
+    if (enabled) {
+        tm.tick();
+    }
 }
 
 void PeaShooter::shoot() {
